@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SHERPA IN - 대시보드 구조 미리보기</title>
+  <title>SHERPA IN - 대시보드</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="/11/css/app.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 <body>
 
-  <!-- Dev Preview Toolbar -->
+  <!-- Dev Toolbar -->
   <div class="dev-toolbar">
     <span class="dev-label">SHERPA IN 구조 미리보기</span>
     <div class="dev-controls">
@@ -28,15 +29,13 @@
     </div>
   </div>
 
-  <!-- Mobile Hamburger -->
+  <!-- Mobile Menu Button -->
   <button id="mobile-menu-btn" class="mobile-menu-btn">
     <i class="fa-solid fa-bars"></i>
   </button>
 
   <!-- Sidebar -->
   <aside id="sidebar" class="sidebar">
-
-    <!-- 헤더 -->
     <div class="sidebar-header">
       <div class="sidebar-logo">
         <div class="logo-mark">S</div>
@@ -47,7 +46,6 @@
       </button>
     </div>
 
-    <!-- 프로필 -->
     <div class="sidebar-profile">
       <div class="profile-avatar">
         <i class="fa-solid fa-user"></i>
@@ -61,7 +59,6 @@
       </div>
     </div>
 
-    <!-- 클라이언트 선택기 (마케터만) -->
     <div id="client-selector" class="client-selector" style="display:none;">
       <label>현재 클라이언트</label>
       <select>
@@ -72,260 +69,473 @@
       </select>
     </div>
 
-    <!-- 네비게이션 (JS에서 동적 생성) -->
     <nav id="sidebar-nav" class="sidebar-nav"></nav>
-
   </aside>
 
-  <!-- Sidebar Overlay (모바일) -->
+  <!-- Overlay -->
   <div id="sidebar-overlay" class="sidebar-overlay"></div>
 
-  <!-- 업그레이드 알림 -->
+  <!-- Upgrade Notice -->
   <div id="upgrade-notice" class="upgrade-notice"></div>
 
   <!-- Main Content -->
-  <main id="main-content" class="main-content">
+  <main class="main-content">
 
-    <!-- 페이지 헤더 -->
+    <!-- Page Header -->
     <div class="page-header">
-      <h1>대시보드</h1>
-      <p>현재 페이지: <strong id="current-feature-display">대시보드</strong></p>
-    </div>
-
-    <!-- 상단 배너 카드 -->
-    <div class="banner-grid">
-      <div class="banner-card banner-1">
-        <div class="banner-label">내 플레이스 순위</div>
-        <div class="banner-value">5위</div>
-        <div class="banner-sub">"강남 치킨" 키워드 기준</div>
+      <div class="page-header-left">
+        <h1>대시보드</h1>
+        <p>현재 선택: <strong id="current-feature-display">대시보드</strong></p>
       </div>
-      <div class="banner-card banner-2">
-        <div class="banner-label">이번 주 신규 리뷰</div>
-        <div class="banner-value">12건</div>
-        <div class="banner-sub">긍정 9건 / 부정 3건</div>
-      </div>
-      <div class="banner-card banner-3">
-        <div class="banner-label">이번 달 매출</div>
-        <div class="banner-value">2,840만원</div>
-        <div class="banner-sub">전월 대비 +12.4%</div>
-      </div>
-      <div class="banner-card banner-4">
-        <div class="banner-label">현재 플랜</div>
-        <div class="banner-value">BASIC</div>
-        <div class="banner-sub">남은 토큰: 150</div>
+      <div class="page-header-right">
+        <span class="header-date" id="header-date"></span>
       </div>
     </div>
 
-    <!-- 기능별 랭킹 TOP 5 -->
-    <h2 class="section-title">기능별 랭킹 TOP 5</h2>
-    <p class="section-sub">같은 업종/지역 내 다른 업체의 성과를 확인하세요.</p>
+    <!-- Stat Cards -->
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-icon si-blue"><i class="fa-solid fa-map-marker-alt"></i></div>
+        <div class="stat-body">
+          <span class="stat-label">내 플레이스 순위</span>
+          <span class="stat-value">5위</span>
+          <span class="stat-change positive"><i class="fa-solid fa-arrow-up"></i> 2단계 상승</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon si-pink"><i class="fa-solid fa-star"></i></div>
+        <div class="stat-body">
+          <span class="stat-label">이번 주 신규 리뷰</span>
+          <span class="stat-value">12건</span>
+          <span class="stat-change positive"><i class="fa-solid fa-arrow-up"></i> 긍정 9건</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon si-cyan"><i class="fa-solid fa-won-sign"></i></div>
+        <div class="stat-body">
+          <span class="stat-label">이번 달 매출</span>
+          <span class="stat-value">2,840만</span>
+          <span class="stat-change positive"><i class="fa-solid fa-arrow-up"></i> +12.4%</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon si-green"><i class="fa-solid fa-coins"></i></div>
+        <div class="stat-body">
+          <span class="stat-label">남은 토큰</span>
+          <span class="stat-value">150</span>
+          <span class="stat-change neutral">BASIC 플랜</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Row 1 -->
+    <div class="chart-grid-2">
+      <div class="card">
+        <div class="card-header">
+          <h3>주간 순위 변동</h3>
+          <select class="card-filter">
+            <option>최근 4주</option>
+            <option>최근 8주</option>
+            <option>최근 12주</option>
+          </select>
+        </div>
+        <div class="card-body">
+          <canvas id="chart-rank"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <h3>월별 매출 추이</h3>
+          <select class="card-filter">
+            <option>최근 6개월</option>
+            <option>최근 12개월</option>
+          </select>
+        </div>
+        <div class="card-body">
+          <canvas id="chart-revenue"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Row 2 -->
+    <div class="chart-grid-2">
+      <div class="card">
+        <div class="card-header">
+          <h3>리뷰 긍/부정 비율</h3>
+        </div>
+        <div class="card-body card-body-donut">
+          <canvas id="chart-review"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <h3>트래픽 유입 현황</h3>
+        </div>
+        <div class="card-body">
+          <canvas id="chart-traffic"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ranking Section -->
+    <div class="section-header">
+      <h2>기능별 업체 랭킹 TOP 5</h2>
+      <p>같은 업종/지역 내 다른 업체의 성과를 확인하고 경쟁력을 높이세요.</p>
+    </div>
 
     <div class="ranking-grid">
-
-      <!-- 순위 상승 TOP 5 -->
-      <div class="ranking-card">
-        <div class="rc-header">
-          <span class="rc-title">순위 상승 TOP 5</span>
-          <a class="rc-cta">순위 추적 시작하기</a>
+      <div class="card">
+        <div class="card-header">
+          <h3><i class="fa-solid fa-chart-line"></i> 순위 상승 TOP 5</h3>
+          <a class="card-cta" href="#">추적 시작</a>
         </div>
-        <ul class="rank-list">
-          <li class="rank-item">
-            <span class="rank-num rank-1">1</span>
-            <span class="rank-name">OO치킨 강남점</span>
-            <span class="rank-keyword">"강남 치킨"</span>
-            <span class="rank-change rank-up">+5</span>
-          </li>
-          <li class="rank-item">
-            <span class="rank-num rank-2">2</span>
-            <span class="rank-name">XX카페 홍대점</span>
-            <span class="rank-keyword">"홍대 카페"</span>
-            <span class="rank-change rank-up">+4</span>
-          </li>
-          <li class="rank-item">
-            <span class="rank-num rank-3">3</span>
-            <span class="rank-name">YY미용실 신사점</span>
-            <span class="rank-keyword">"신사 미용실"</span>
-            <span class="rank-change rank-up">+3</span>
-          </li>
-          <li class="rank-item">
-            <span class="rank-num rank-4">4</span>
-            <span class="rank-name">ZZ피자 잠실점</span>
-            <span class="rank-keyword">"잠실 피자"</span>
-            <span class="rank-change rank-up">+3</span>
-          </li>
-          <li class="rank-item">
-            <span class="rank-num rank-5">5</span>
-            <span class="rank-name">AA맛집 이태원점</span>
-            <span class="rank-keyword">"이태원 맛집"</span>
-            <span class="rank-change rank-up">+2</span>
-          </li>
-        </ul>
-      </div>
-
-      <!-- 리뷰 관리 성과 TOP 5 -->
-      <div class="ranking-card">
-        <div class="rc-header">
-          <span class="rc-title">리뷰 관리 성과 TOP 5</span>
-          <a class="rc-cta">리뷰 관리 시작하기</a>
+        <div class="card-body card-body-list">
+          <div class="rank-row">
+            <span class="rank-num r1">1</span>
+            <div class="rank-info">
+              <span class="rank-name">OO치킨 강남점</span>
+              <span class="rank-keyword">"강남 치킨"</span>
+            </div>
+            <span class="rank-badge up">3위→1위</span>
+          </div>
+          <div class="rank-row">
+            <span class="rank-num r2">2</span>
+            <div class="rank-info">
+              <span class="rank-name">XX카페 홍대점</span>
+              <span class="rank-keyword">"홍대 카페"</span>
+            </div>
+            <span class="rank-badge up">7위→3위</span>
+          </div>
+          <div class="rank-row">
+            <span class="rank-num r3">3</span>
+            <div class="rank-info">
+              <span class="rank-name">YY미용실 신사점</span>
+              <span class="rank-keyword">"신사 미용실"</span>
+            </div>
+            <span class="rank-badge up">9위→5위</span>
+          </div>
+          <div class="rank-row">
+            <span class="rank-num r4">4</span>
+            <div class="rank-info">
+              <span class="rank-name">ZZ피자 잠실점</span>
+              <span class="rank-keyword">"잠실 피자"</span>
+            </div>
+            <span class="rank-badge up">12위→8위</span>
+          </div>
+          <div class="rank-row">
+            <span class="rank-num r5">5</span>
+            <div class="rank-info">
+              <span class="rank-name">AA맛집 이태원점</span>
+              <span class="rank-keyword">"이태원 맛집"</span>
+            </div>
+            <span class="rank-badge up">6위→4위</span>
+          </div>
         </div>
-        <ul class="rank-list">
-          <li class="rank-item">
-            <span class="rank-num rank-1">1</span>
-            <span class="rank-name">BB한식 종로점</span>
-            <span class="rank-keyword">부정비율 23%→8%</span>
-            <span class="rank-change rank-up">-15%p</span>
-          </li>
-          <li class="rank-item">
-            <span class="rank-num rank-2">2</span>
-            <span class="rank-name">CC카페 연남점</span>
-            <span class="rank-keyword">리뷰 +47건</span>
-            <span class="rank-change rank-up">+47</span>
-          </li>
-          <li class="rank-item">
-            <span class="rank-num rank-3">3</span>
-            <span class="rank-name">DD네일 압구정점</span>
-            <span class="rank-keyword">평점 3.8→4.5</span>
-            <span class="rank-change rank-up">+0.7</span>
-          </li>
-          <li class="rank-item">
-            <span class="rank-num rank-4">4</span>
-            <span class="rank-name">EE고기 마포점</span>
-            <span class="rank-keyword">리뷰 +38건</span>
-            <span class="rank-change rank-up">+38</span>
-          </li>
-          <li class="rank-item">
-            <span class="rank-num rank-5">5</span>
-            <span class="rank-name">FF분식 건대점</span>
-            <span class="rank-keyword">평점 4.0→4.6</span>
-            <span class="rank-change rank-up">+0.6</span>
-          </li>
-        </ul>
       </div>
 
-      <!-- 트래픽 증가 TOP 5 -->
-      <div class="ranking-card">
-        <div class="rc-header">
-          <span class="rc-title">트래픽 증가 TOP 5</span>
-          <a class="rc-cta">품앗이 참여하기</a>
+      <div class="card">
+        <div class="card-header">
+          <h3><i class="fa-solid fa-star"></i> 리뷰 개선 TOP 5</h3>
+          <a class="card-cta" href="#">리뷰 관리</a>
         </div>
-        <ul class="rank-list">
-          <li class="rank-item">
-            <span class="rank-num rank-1">1</span>
-            <span class="rank-name">GG식당 역삼점</span>
-            <span class="rank-keyword">저장 +340건</span>
-            <span class="rank-change rank-up">+340</span>
-          </li>
-          <li class="rank-item">
-            <span class="rank-num rank-2">2</span>
-            <span class="rank-name">HH베이커리 합정점</span>
-            <span class="rank-keyword">길찾기 +280건</span>
-            <span class="rank-change rank-up">+280</span>
-          </li>
-          <li class="rank-item">
-            <span class="rank-num rank-3">3</span>
-            <span class="rank-name">II뷰티 강남점</span>
-            <span class="rank-keyword">저장 +210건</span>
-            <span class="rank-change rank-up">+210</span>
-          </li>
-          <li class="rank-item">
-            <span class="rank-num rank-4">4</span>
-            <span class="rank-name">JJ치과 서초점</span>
-            <span class="rank-keyword">트래픽 +180건</span>
-            <span class="rank-change rank-up">+180</span>
-          </li>
-          <li class="rank-item">
-            <span class="rank-num rank-5">5</span>
-            <span class="rank-name">KK카페 성수점</span>
-            <span class="rank-keyword">저장 +150건</span>
-            <span class="rank-change rank-up">+150</span>
-          </li>
-        </ul>
-      </div>
-
-      <!-- 매출 상승 TOP 5 -->
-      <div class="ranking-card">
-        <div class="rc-header">
-          <span class="rc-title">매출 상승 TOP 5</span>
-          <a class="rc-cta">매출 연동하기</a>
+        <div class="card-body card-body-list">
+          <div class="rank-row">
+            <span class="rank-num r1">1</span>
+            <div class="rank-info">
+              <span class="rank-name">BB한식 종로점</span>
+              <span class="rank-keyword">부정비율 23%→8%</span>
+            </div>
+            <span class="rank-badge up">-15%p</span>
+          </div>
+          <div class="rank-row">
+            <span class="rank-num r2">2</span>
+            <div class="rank-info">
+              <span class="rank-name">CC카페 연남점</span>
+              <span class="rank-keyword">신규 리뷰 +47건</span>
+            </div>
+            <span class="rank-badge up">+47</span>
+          </div>
+          <div class="rank-row">
+            <span class="rank-num r3">3</span>
+            <div class="rank-info">
+              <span class="rank-name">DD네일 압구정점</span>
+              <span class="rank-keyword">평점 3.8→4.5</span>
+            </div>
+            <span class="rank-badge up">+0.7</span>
+          </div>
+          <div class="rank-row">
+            <span class="rank-num r4">4</span>
+            <div class="rank-info">
+              <span class="rank-name">EE고기 마포점</span>
+              <span class="rank-keyword">신규 리뷰 +38건</span>
+            </div>
+            <span class="rank-badge up">+38</span>
+          </div>
+          <div class="rank-row">
+            <span class="rank-num r5">5</span>
+            <div class="rank-info">
+              <span class="rank-name">FF분식 건대점</span>
+              <span class="rank-keyword">평점 4.0→4.6</span>
+            </div>
+            <span class="rank-badge up">+0.6</span>
+          </div>
         </div>
-        <ul class="rank-list">
-          <li class="rank-item">
-            <span class="rank-num rank-1">1</span>
-            <span class="rank-name">LL치킨 송파점</span>
-            <span class="rank-keyword">전월 대비</span>
-            <span class="rank-change rank-up">+32%</span>
-          </li>
-          <li class="rank-item">
-            <span class="rank-num rank-2">2</span>
-            <span class="rank-name">MM한식 광화문점</span>
-            <span class="rank-keyword">전월 대비</span>
-            <span class="rank-change rank-up">+28%</span>
-          </li>
-          <li class="rank-item">
-            <span class="rank-num rank-3">3</span>
-            <span class="rank-name">NN카페 삼청점</span>
-            <span class="rank-keyword">전월 대비</span>
-            <span class="rank-change rank-up">+24%</span>
-          </li>
-          <li class="rank-item">
-            <span class="rank-num rank-4">4</span>
-            <span class="rank-name">OO피자 목동점</span>
-            <span class="rank-keyword">전월 대비</span>
-            <span class="rank-change rank-up">+19%</span>
-          </li>
-          <li class="rank-item">
-            <span class="rank-num rank-5">5</span>
-            <span class="rank-name">PP식당 여의도점</span>
-            <span class="rank-keyword">전월 대비</span>
-            <span class="rank-change rank-up">+15%</span>
-          </li>
-        </ul>
       </div>
 
-    </div>
+      <div class="card">
+        <div class="card-header">
+          <h3><i class="fa-solid fa-bolt"></i> 트래픽 증가 TOP 5</h3>
+          <a class="card-cta" href="#">품앗이 참여</a>
+        </div>
+        <div class="card-body card-body-list">
+          <div class="rank-row">
+            <span class="rank-num r1">1</span>
+            <div class="rank-info">
+              <span class="rank-name">GG식당 역삼점</span>
+              <span class="rank-keyword">저장하기 +340건</span>
+            </div>
+            <span class="rank-badge up">+340</span>
+          </div>
+          <div class="rank-row">
+            <span class="rank-num r2">2</span>
+            <div class="rank-info">
+              <span class="rank-name">HH베이커리 합정점</span>
+              <span class="rank-keyword">길찾기 +280건</span>
+            </div>
+            <span class="rank-badge up">+280</span>
+          </div>
+          <div class="rank-row">
+            <span class="rank-num r3">3</span>
+            <div class="rank-info">
+              <span class="rank-name">II뷰티 강남점</span>
+              <span class="rank-keyword">저장하기 +210건</span>
+            </div>
+            <span class="rank-badge up">+210</span>
+          </div>
+          <div class="rank-row">
+            <span class="rank-num r4">4</span>
+            <div class="rank-info">
+              <span class="rank-name">JJ치과 서초점</span>
+              <span class="rank-keyword">트래픽 +180건</span>
+            </div>
+            <span class="rank-badge up">+180</span>
+          </div>
+          <div class="rank-row">
+            <span class="rank-num r5">5</span>
+            <div class="rank-info">
+              <span class="rank-name">KK카페 성수점</span>
+              <span class="rank-keyword">저장하기 +150건</span>
+            </div>
+            <span class="rank-badge up">+150</span>
+          </div>
+        </div>
+      </div>
 
-    <!-- 빠른 접근 -->
-    <h2 class="section-title">빠른 접근</h2>
-    <div class="quick-grid">
-      <div class="quick-card">
-        <i class="fa-solid fa-map-marker-alt"></i>
-        <span>순위 조회</span>
-      </div>
-      <div class="quick-card">
-        <i class="fa-solid fa-magnifying-glass-chart"></i>
-        <span>키워드 검색량</span>
-      </div>
-      <div class="quick-card">
-        <i class="fa-solid fa-comments"></i>
-        <span>리뷰 모니터링</span>
-      </div>
-      <div class="quick-card">
-        <i class="fa-solid fa-handshake"></i>
-        <span>품앗이</span>
-      </div>
-      <div class="quick-card">
-        <i class="fa-solid fa-calculator"></i>
-        <span>손익계산</span>
-      </div>
-      <div class="quick-card">
-        <i class="fa-solid fa-pen-nib"></i>
-        <span>블로그 포스팅</span>
-      </div>
-      <div class="quick-card">
-        <i class="fa-solid fa-arrow-trend-up"></i>
-        <span>트렌드</span>
-      </div>
-      <div class="quick-card">
-        <i class="fa-solid fa-credit-card"></i>
-        <span>플랜 관리</span>
+      <div class="card">
+        <div class="card-header">
+          <h3><i class="fa-solid fa-won-sign"></i> 매출 상승 TOP 5</h3>
+          <a class="card-cta" href="#">매출 연동</a>
+        </div>
+        <div class="card-body card-body-list">
+          <div class="rank-row">
+            <span class="rank-num r1">1</span>
+            <div class="rank-info">
+              <span class="rank-name">LL치킨 송파점</span>
+              <span class="rank-keyword">전월 대비</span>
+            </div>
+            <span class="rank-badge up">+32%</span>
+          </div>
+          <div class="rank-row">
+            <span class="rank-num r2">2</span>
+            <div class="rank-info">
+              <span class="rank-name">MM한식 광화문점</span>
+              <span class="rank-keyword">전월 대비</span>
+            </div>
+            <span class="rank-badge up">+28%</span>
+          </div>
+          <div class="rank-row">
+            <span class="rank-num r3">3</span>
+            <div class="rank-info">
+              <span class="rank-name">NN카페 삼청점</span>
+              <span class="rank-keyword">전월 대비</span>
+            </div>
+            <span class="rank-badge up">+24%</span>
+          </div>
+          <div class="rank-row">
+            <span class="rank-num r4">4</span>
+            <div class="rank-info">
+              <span class="rank-name">OO피자 목동점</span>
+              <span class="rank-keyword">전월 대비</span>
+            </div>
+            <span class="rank-badge up">+19%</span>
+          </div>
+          <div class="rank-row">
+            <span class="rank-num r5">5</span>
+            <div class="rank-info">
+              <span class="rank-name">PP식당 여의도점</span>
+              <span class="rank-keyword">전월 대비</span>
+            </div>
+            <span class="rank-badge up">+15%</span>
+          </div>
+        </div>
       </div>
     </div>
 
   </main>
 
-  <!-- Scripts -->
   <script src="/11/js/feature-config.js"></script>
   <script src="/11/js/sidebar.js"></script>
+  <script>
+    // 날짜 표시
+    (function(){
+      var now = new Date();
+      var y = now.getFullYear();
+      var m = now.getMonth()+1;
+      var d = now.getDate();
+      var days = ['일','월','화','수','목','금','토'];
+      var day = days[now.getDay()];
+      document.getElementById('header-date').textContent = y+'년 '+m+'월 '+d+'일 ('+day+')';
+    })();
+
+    // 차트
+    var blue = '#4A6CF7';
+    var pink = '#f5576c';
+    var cyan = '#00c9db';
+    var green = '#43e97b';
+    var orange = '#f59e0b';
+    var gray = '#e5e7eb';
+
+    // 순위 변동 차트
+    new Chart(document.getElementById('chart-rank'), {
+      type: 'line',
+      data: {
+        labels: ['1주차','2주차','3주차','4주차','5주차','6주차','7주차','8주차'],
+        datasets: [{
+          label: '내 순위',
+          data: [12, 9, 8, 7, 7, 5, 5, 5],
+          borderColor: blue,
+          backgroundColor: 'rgba(74,108,247,0.08)',
+          fill: true,
+          tension: 0.35,
+          pointRadius: 4,
+          pointBackgroundColor: blue,
+          borderWidth: 2.5
+        },{
+          label: '경쟁사 A',
+          data: [3, 4, 3, 5, 4, 6, 5, 6],
+          borderColor: pink,
+          borderDash: [5,4],
+          tension: 0.35,
+          pointRadius: 3,
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: { reverse: true, min: 1, max: 15, title: { display: true, text: '순위' }, grid: { color: '#f3f4f6' } },
+          x: { grid: { display: false } }
+        },
+        plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, padding: 16 } } }
+      }
+    });
+
+    // 매출 차트
+    new Chart(document.getElementById('chart-revenue'), {
+      type: 'bar',
+      data: {
+        labels: ['1월','2월','3월','4월','5월','6월'],
+        datasets: [{
+          label: '매출 (만원)',
+          data: [2100, 2300, 2150, 2520, 2640, 2840],
+          backgroundColor: [
+            'rgba(74,108,247,0.15)','rgba(74,108,247,0.15)','rgba(74,108,247,0.15)',
+            'rgba(74,108,247,0.15)','rgba(74,108,247,0.15)','rgba(74,108,247,0.7)'
+          ],
+          borderColor: blue,
+          borderWidth: 1.5,
+          borderRadius: 6,
+          barPercentage: 0.6
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: { beginAtZero: false, min: 1800, grid: { color: '#f3f4f6' } },
+          x: { grid: { display: false } }
+        },
+        plugins: { legend: { display: false } }
+      }
+    });
+
+    // 리뷰 차트
+    new Chart(document.getElementById('chart-review'), {
+      type: 'doughnut',
+      data: {
+        labels: ['긍정','보통','부정'],
+        datasets: [{
+          data: [65, 23, 12],
+          backgroundColor: [green, orange, pink],
+          borderWidth: 0,
+          spacing: 3
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '68%',
+        plugins: {
+          legend: { position: 'bottom', labels: { boxWidth: 10, padding: 14 } }
+        }
+      }
+    });
+
+    // 트래픽 차트
+    new Chart(document.getElementById('chart-traffic'), {
+      type: 'line',
+      data: {
+        labels: ['월','화','수','목','금','토','일'],
+        datasets: [{
+          label: '저장하기',
+          data: [24, 31, 28, 45, 52, 67, 43],
+          borderColor: cyan,
+          backgroundColor: 'rgba(0,201,219,0.08)',
+          fill: true,
+          tension: 0.4,
+          borderWidth: 2.5,
+          pointRadius: 3
+        },{
+          label: '길찾기',
+          data: [18, 22, 19, 35, 41, 58, 38],
+          borderColor: green,
+          backgroundColor: 'rgba(67,233,123,0.08)',
+          fill: true,
+          tension: 0.4,
+          borderWidth: 2.5,
+          pointRadius: 3
+        },{
+          label: '전화',
+          data: [8, 12, 9, 15, 18, 28, 14],
+          borderColor: orange,
+          tension: 0.4,
+          borderWidth: 2,
+          pointRadius: 3,
+          borderDash: [4,3]
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: { beginAtZero: true, grid: { color: '#f3f4f6' } },
+          x: { grid: { display: false } }
+        },
+        plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, padding: 14 } } }
+      }
+    });
+  </script>
 
 </body>
 </html>
