@@ -1,8 +1,3 @@
-/**
- * SHERPA IN - 사이드바 렌더링
- * feature-config.js의 설정을 읽어 role/plan에 맞게 사이드바를 동적 생성한다.
- */
-
 (function () {
   'use strict';
 
@@ -10,6 +5,7 @@
   var currentPlan = 'a';
   var sidebarCollapsed = false;
   var activeItemId = 'dashboard';
+  var collapsedCats = {};
 
   var PLAN_ORDER = { 'a': 1, 'b': 2, 'c': 3 };
   var PLAN_NAME = { 'a': 'BASIC', 'b': 'STANDARD', 'c': 'PRO' };
@@ -38,7 +34,6 @@
     item.href = '#';
     item.className = 'sidebar-item';
     item.dataset.featureId = featureId;
-
     if (locked) item.classList.add('is-locked');
     if (isPlanned || isApp) item.classList.add('is-muted');
     if (featureId === activeItemId) item.classList.add('is-active');
@@ -59,25 +54,25 @@
     badgeArea.className = 'item-badge-area';
 
     if (locked) {
-      var badge = document.createElement('span');
-      badge.className = 'item-badge badge-lock';
-      badge.innerHTML = '<i class="fa-solid fa-lock"></i> ' + PLAN_NAME[access];
-      badgeArea.appendChild(badge);
+      var b = document.createElement('span');
+      b.className = 'item-badge badge-lock';
+      b.innerHTML = '<i class="fa-solid fa-lock"></i> ' + PLAN_NAME[access];
+      badgeArea.appendChild(b);
     } else if (isPlanned) {
-      var badge = document.createElement('span');
-      badge.className = 'item-badge badge-planned';
-      badge.textContent = '준비중';
-      badgeArea.appendChild(badge);
+      var b = document.createElement('span');
+      b.className = 'item-badge badge-planned';
+      b.textContent = '준비중';
+      badgeArea.appendChild(b);
     } else if (isApp) {
-      var badge = document.createElement('span');
-      badge.className = 'item-badge badge-app';
-      badge.textContent = '앱';
-      badgeArea.appendChild(badge);
+      var b = document.createElement('span');
+      b.className = 'item-badge badge-app';
+      b.textContent = '앱';
+      badgeArea.appendChild(b);
     } else if (isDev) {
-      var badge = document.createElement('span');
-      badge.className = 'item-badge badge-dev';
-      badge.textContent = '개발중';
-      badgeArea.appendChild(badge);
+      var b = document.createElement('span');
+      b.className = 'item-badge badge-dev';
+      b.textContent = '개발중';
+      badgeArea.appendChild(b);
     }
 
     item.appendChild(badgeArea);
@@ -103,7 +98,6 @@
     for (var c = 0; c < CATEGORIES.length; c++) {
       var cat = CATEGORIES[c];
       var visibleItems = [];
-
       for (var j = 0; j < cat.items.length; j++) {
         var id = cat.items[j];
         var feature = FEATURES[id];
@@ -111,21 +105,55 @@
           visibleItems.push(id);
         }
       }
-
       if (visibleItems.length === 0) continue;
 
-      if (cat.title) {
-        var header = document.createElement('div');
-        header.className = 'sidebar-category';
-        header.textContent = cat.title;
-        nav.appendChild(header);
+      // 타이틀 없는 카테고리 (홈)
+      if (!cat.title) {
+        for (var k = 0; k < visibleItems.length; k++) {
+          nav.appendChild(createMenuItem(visibleItems[k], FEATURES[visibleItems[k]]));
+        }
+        continue;
       }
 
+      // 카테고리 헤더 (접기/펼치기)
+      var isCol = collapsedCats[cat.id] || false;
+
+      var header = document.createElement('div');
+      header.className = 'sidebar-category' + (isCol ? ' is-collapsed' : '');
+      header.dataset.catId = cat.id;
+
+      var titleSpan = document.createElement('span');
+      titleSpan.textContent = cat.title;
+      header.appendChild(titleSpan);
+
+      var arrow = document.createElement('span');
+      arrow.className = 'cat-arrow';
+      arrow.innerHTML = '<i class="fa-solid fa-chevron-down"></i>';
+      header.appendChild(arrow);
+
+      header.addEventListener('click', (function (catId) {
+        return function () {
+          collapsedCats[catId] = !collapsedCats[catId];
+          renderSidebar();
+        };
+      })(cat.id));
+
+      nav.appendChild(header);
+
+      // 아이템 wrapper
+      var wrapper = document.createElement('div');
+      wrapper.className = 'sidebar-cat-items' + (isCol ? ' is-collapsed' : '');
+
       for (var k = 0; k < visibleItems.length; k++) {
-        var fid = visibleItems[k];
-        var feat = FEATURES[fid];
-        nav.appendChild(createMenuItem(fid, feat));
+        wrapper.appendChild(createMenuItem(visibleItems[k], FEATURES[visibleItems[k]]));
       }
+
+      // max-height 설정 (펼침 시)
+      if (!isCol) {
+        wrapper.style.maxHeight = (visibleItems.length * 42) + 'px';
+      }
+
+      nav.appendChild(wrapper);
     }
 
     updateProfileBadges();
@@ -147,9 +175,9 @@
   }
 
   function updateClientSelector() {
-    var selector = document.getElementById('client-selector');
-    if (!selector) return;
-    selector.style.display = (currentRole === 'marketer') ? 'block' : 'none';
+    var sel = document.getElementById('client-selector');
+    if (!sel) return;
+    sel.style.display = (currentRole === 'marketer') ? 'block' : 'none';
   }
 
   function updateMenuCount() {
@@ -158,8 +186,7 @@
     var nav = document.getElementById('sidebar-nav');
     var total = nav.querySelectorAll('.sidebar-item').length;
     var locked = nav.querySelectorAll('.sidebar-item.is-locked').length;
-    var active = total - locked;
-    counter.textContent = '메뉴 ' + total + '개 (활성 ' + active + ' / 잠금 ' + locked + ')';
+    counter.textContent = total + '개 (활성 ' + (total - locked) + ' / 잠금 ' + locked + ')';
   }
 
   function setActiveItem(featureId) {
@@ -183,9 +210,7 @@
     if (notice) {
       notice.textContent = planName + ' 플랜 이상에서 사용할 수 있습니다.';
       notice.classList.add('show');
-      setTimeout(function () {
-        notice.classList.remove('show');
-      }, 2500);
+      setTimeout(function () { notice.classList.remove('show'); }, 2500);
     }
   }
 
@@ -196,53 +221,29 @@
     } else {
       document.body.classList.remove('sidebar-collapsed');
     }
-    var toggleIcon = document.querySelector('#sidebar-toggle i');
-    if (toggleIcon) {
-      toggleIcon.className = sidebarCollapsed
-        ? 'fa-solid fa-angles-right'
-        : 'fa-solid fa-angles-left';
+    var icon = document.querySelector('#sidebar-toggle i');
+    if (icon) {
+      icon.className = sidebarCollapsed ? 'fa-solid fa-angles-right' : 'fa-solid fa-angles-left';
     }
-  }
-
-  function openMobileSidebar() {
-    document.body.classList.add('sidebar-mobile-open');
-  }
-
-  function closeMobileSidebar() {
-    document.body.classList.remove('sidebar-mobile-open');
   }
 
   function init() {
     var roleSelect = document.getElementById('role-select');
     var planSelect = document.getElementById('plan-select');
-
     if (roleSelect) {
-      roleSelect.addEventListener('change', function () {
-        currentRole = this.value;
-        renderSidebar();
-      });
+      roleSelect.addEventListener('change', function () { currentRole = this.value; renderSidebar(); });
     }
     if (planSelect) {
-      planSelect.addEventListener('change', function () {
-        currentPlan = this.value;
-        renderSidebar();
-      });
+      planSelect.addEventListener('change', function () { currentPlan = this.value; renderSidebar(); });
     }
-
     var toggleBtn = document.getElementById('sidebar-toggle');
-    if (toggleBtn) {
-      toggleBtn.addEventListener('click', toggleSidebar);
-    }
+    if (toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
 
     var mobileBtn = document.getElementById('mobile-menu-btn');
-    if (mobileBtn) {
-      mobileBtn.addEventListener('click', openMobileSidebar);
-    }
+    if (mobileBtn) mobileBtn.addEventListener('click', function () { document.body.classList.add('sidebar-mobile-open'); });
 
     var overlay = document.getElementById('sidebar-overlay');
-    if (overlay) {
-      overlay.addEventListener('click', closeMobileSidebar);
-    }
+    if (overlay) overlay.addEventListener('click', function () { document.body.classList.remove('sidebar-mobile-open'); });
 
     renderSidebar();
   }
@@ -252,5 +253,4 @@
   } else {
     init();
   }
-
 })();
