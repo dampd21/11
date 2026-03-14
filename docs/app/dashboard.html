@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SHERPA IN - 대시보드 구조 미리보기</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/11/css/app.css">
+</head>
+<body>
+
+  <!-- Dev Preview Toolbar -->
+  <div class="dev-toolbar">
+    <span class="dev-label">SHERPA IN 구조 미리보기</span>
+    <div class="dev-controls">
+      <label>역할:</label>
+      <select id="role-select">
+        <option value="general">자영업자</option>
+        <option value="marketer">마케터</option>
+      </select>
+      <label>플랜:</label>
+      <select id="plan-select">
+        <option value="a">BASIC</option>
+        <option value="b">STANDARD</option>
+        <option value="c">PRO</option>
+      </select>
+      <span class="dev-count" id="menu-count"></span>
+    </div>
+  </div>
+
+  <!-- Mobile Hamburger -->
+  <button id="mobile-menu-btn" class="mobile-menu-btn">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="sidebar">
+
+    <!-- 헤더 -->
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <div class="logo-mark">S</div>
+        <span class="logo-text">SHERPA IN</span>
+      </div>
+      <button id="sidebar-toggle" class="sidebar-toggle">
+        <i class="fa-solid fa-angles-left"></i>
+      </button>
+    </div>
+
+    <!-- 프로필 -->
+    <div class="sidebar-profile">
+      <div class="profile-avatar">
+        <i class="fa-solid fa-user"></i>
+      </div>
+      <div class="profile-info">
+        <span class="profile-name">테스트 사용자</span>
+        <div class="profile-badges">
+          <span id="role-badge" class="badge badge-role">자영업자</span>
+          <span id="plan-badge" class="badge badge-plan plan-a">BASIC</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 클라이언트 선택기 (마케터만) -->
+    <div id="client-selector" class="client-selector" style="display:none;">
+      <label>현재 클라이언트</label>
+      <select>
+        <option>OO치킨 강남점</option>
+        <option>XX카페 홍대점</option>
+        <option>YY미용실 신사점</option>
+        <option>+ 클라이언트 추가</option>
+      </select>
+    </div>
+
+    <!-- 네비게이션 (JS에서 동적 생성) -->
+    <nav id="sidebar-nav" class="sidebar-nav"></nav>
+
+  </aside>
+
+  <!-- Sidebar Overlay (모바일) -->
+  <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+  <!-- 업그레이드 알림 -->
+  <div id="upgrade-notice" class="upgrade-notice"></div>
+
+  <!-- Main Content -->
+  <main id="main-content" class="main-content">
+
+    <!-- 페이지 헤더 -->
+    <div class="page-header">
+      <h1>대시보드</h1>
+      <p>현재 페이지: <strong id="current-feature-display">대시보드</strong></p>
+    </div>
+
+    <!-- 상단 배너 카드 -->
+    <div class="banner-grid">
+      <div class="banner-card banner-1">
+        <div class="banner-label">내 플레이스 순위</div>
+        <div class="banner-value">5위</div>
+        <div class="banner-sub">"강남 치킨" 키워드 기준</div>
+      </div>
+      <div class="banner-card banner-2">
+        <div class="banner-label">이번 주 신규 리뷰</div>
+        <div class="banner-value">12건</div>
+        <div class="banner-sub">긍정 9건 / 부정 3건</div>
+      </div>
+      <div class="banner-card banner-3">
+        <div class="banner-label">이번 달 매출</div>
+        <div class="banner-value">2,840만원</div>
+        <div class="banner-sub">전월 대비 +12.4%</div>
+      </div>
+      <div class="banner-card banner-4">
+        <div class="banner-label">현재 플랜</div>
+        <div class="banner-value">BASIC</div>
+        <div class="banner-sub">남은 토큰: 150</div>
+      </div>
+    </div>
+
+    <!-- 기능별 랭킹 TOP 5 -->
+    <h2 class="section-title">기능별 랭킹 TOP 5</h2>
+    <p class="section-sub">같은 업종/지역 내 다른 업체의 성과를 확인하세요.</p>
+
+    <div class="ranking-grid">
+
+      <!-- 순위 상승 TOP 5 -->
+      <div class="ranking-card">
+        <div class="rc-header">
+          <span class="rc-title">순위 상승 TOP 5</span>
+          <a class="rc-cta">순위 추적 시작하기</a>
+        </div>
+        <ul class="rank-list">
+          <li class="rank-item">
+            <span class="rank-num rank-1">1</span>
+            <span class="rank-name">OO치킨 강남점</span>
+            <span class="rank-keyword">"강남 치킨"</span>
+            <span class="rank-change rank-up">+5</span>
+          </li>
+          <li class="rank-item">
+            <span class="rank-num rank-2">2</span>
+            <span class="rank-name">XX카페 홍대점</span>
+            <span class="rank-keyword">"홍대 카페"</span>
+            <span class="rank-change rank-up">+4</span>
+          </li>
+          <li class="rank-item">
+            <span class="rank-num rank-3">3</span>
+            <span class="rank-name">YY미용실 신사점</span>
+            <span class="rank-keyword">"신사 미용실"</span>
+            <span class="rank-change rank-up">+3</span>
+          </li>
+          <li class="rank-item">
+            <span class="rank-num rank-4">4</span>
+            <span class="rank-name">ZZ피자 잠실점</span>
+            <span class="rank-keyword">"잠실 피자"</span>
+            <span class="rank-change rank-up">+3</span>
+          </li>
+          <li class="rank-item">
+            <span class="rank-num rank-5">5</span>
+            <span class="rank-name">AA맛집 이태원점</span>
+            <span class="rank-keyword">"이태원 맛집"</span>
+            <span class="rank-change rank-up">+2</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- 리뷰 관리 성과 TOP 5 -->
+      <div class="ranking-card">
+        <div class="rc-header">
+          <span class="rc-title">리뷰 관리 성과 TOP 5</span>
+          <a class="rc-cta">리뷰 관리 시작하기</a>
+        </div>
+        <ul class="rank-list">
+          <li class="rank-item">
+            <span class="rank-num rank-1">1</span>
+            <span class="rank-name">BB한식 종로점</span>
+            <span class="rank-keyword">부정비율 23%→8%</span>
+            <span class="rank-change rank-up">-15%p</span>
+          </li>
+          <li class="rank-item">
+            <span class="rank-num rank-2">2</span>
+            <span class="rank-name">CC카페 연남점</span>
+            <span class="rank-keyword">리뷰 +47건</span>
+            <span class="rank-change rank-up">+47</span>
+          </li>
+          <li class="rank-item">
+            <span class="rank-num rank-3">3</span>
+            <span class="rank-name">DD네일 압구정점</span>
+            <span class="rank-keyword">평점 3.8→4.5</span>
+            <span class="rank-change rank-up">+0.7</span>
+          </li>
+          <li class="rank-item">
+            <span class="rank-num rank-4">4</span>
+            <span class="rank-name">EE고기 마포점</span>
+            <span class="rank-keyword">리뷰 +38건</span>
+            <span class="rank-change rank-up">+38</span>
+          </li>
+          <li class="rank-item">
+            <span class="rank-num rank-5">5</span>
+            <span class="rank-name">FF분식 건대점</span>
+            <span class="rank-keyword">평점 4.0→4.6</span>
+            <span class="rank-change rank-up">+0.6</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- 트래픽 증가 TOP 5 -->
+      <div class="ranking-card">
+        <div class="rc-header">
+          <span class="rc-title">트래픽 증가 TOP 5</span>
+          <a class="rc-cta">품앗이 참여하기</a>
+        </div>
+        <ul class="rank-list">
+          <li class="rank-item">
+            <span class="rank-num rank-1">1</span>
+            <span class="rank-name">GG식당 역삼점</span>
+            <span class="rank-keyword">저장 +340건</span>
+            <span class="rank-change rank-up">+340</span>
+          </li>
+          <li class="rank-item">
+            <span class="rank-num rank-2">2</span>
+            <span class="rank-name">HH베이커리 합정점</span>
+            <span class="rank-keyword">길찾기 +280건</span>
+            <span class="rank-change rank-up">+280</span>
+          </li>
+          <li class="rank-item">
+            <span class="rank-num rank-3">3</span>
+            <span class="rank-name">II뷰티 강남점</span>
+            <span class="rank-keyword">저장 +210건</span>
+            <span class="rank-change rank-up">+210</span>
+          </li>
+          <li class="rank-item">
+            <span class="rank-num rank-4">4</span>
+            <span class="rank-name">JJ치과 서초점</span>
+            <span class="rank-keyword">트래픽 +180건</span>
+            <span class="rank-change rank-up">+180</span>
+          </li>
+          <li class="rank-item">
+            <span class="rank-num rank-5">5</span>
+            <span class="rank-name">KK카페 성수점</span>
+            <span class="rank-keyword">저장 +150건</span>
+            <span class="rank-change rank-up">+150</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- 매출 상승 TOP 5 -->
+      <div class="ranking-card">
+        <div class="rc-header">
+          <span class="rc-title">매출 상승 TOP 5</span>
+          <a class="rc-cta">매출 연동하기</a>
+        </div>
+        <ul class="rank-list">
+          <li class="rank-item">
+            <span class="rank-num rank-1">1</span>
+            <span class="rank-name">LL치킨 송파점</span>
+            <span class="rank-keyword">전월 대비</span>
+            <span class="rank-change rank-up">+32%</span>
+          </li>
+          <li class="rank-item">
+            <span class="rank-num rank-2">2</span>
+            <span class="rank-name">MM한식 광화문점</span>
+            <span class="rank-keyword">전월 대비</span>
+            <span class="rank-change rank-up">+28%</span>
+          </li>
+          <li class="rank-item">
+            <span class="rank-num rank-3">3</span>
+            <span class="rank-name">NN카페 삼청점</span>
+            <span class="rank-keyword">전월 대비</span>
+            <span class="rank-change rank-up">+24%</span>
+          </li>
+          <li class="rank-item">
+            <span class="rank-num rank-4">4</span>
+            <span class="rank-name">OO피자 목동점</span>
+            <span class="rank-keyword">전월 대비</span>
+            <span class="rank-change rank-up">+19%</span>
+          </li>
+          <li class="rank-item">
+            <span class="rank-num rank-5">5</span>
+            <span class="rank-name">PP식당 여의도점</span>
+            <span class="rank-keyword">전월 대비</span>
+            <span class="rank-change rank-up">+15%</span>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- 빠른 접근 -->
+    <h2 class="section-title">빠른 접근</h2>
+    <div class="quick-grid">
+      <div class="quick-card">
+        <i class="fa-solid fa-map-marker-alt"></i>
+        <span>순위 조회</span>
+      </div>
+      <div class="quick-card">
+        <i class="fa-solid fa-magnifying-glass-chart"></i>
+        <span>키워드 검색량</span>
+      </div>
+      <div class="quick-card">
+        <i class="fa-solid fa-comments"></i>
+        <span>리뷰 모니터링</span>
+      </div>
+      <div class="quick-card">
+        <i class="fa-solid fa-handshake"></i>
+        <span>품앗이</span>
+      </div>
+      <div class="quick-card">
+        <i class="fa-solid fa-calculator"></i>
+        <span>손익계산</span>
+      </div>
+      <div class="quick-card">
+        <i class="fa-solid fa-pen-nib"></i>
+        <span>블로그 포스팅</span>
+      </div>
+      <div class="quick-card">
+        <i class="fa-solid fa-arrow-trend-up"></i>
+        <span>트렌드</span>
+      </div>
+      <div class="quick-card">
+        <i class="fa-solid fa-credit-card"></i>
+        <span>플랜 관리</span>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Scripts -->
+  <script src="/11/js/feature-config.js"></script>
+  <script src="/11/js/sidebar.js"></script>
+
+</body>
+</html>
